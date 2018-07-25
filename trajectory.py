@@ -85,6 +85,8 @@ class Trajectory:
         self.x = self.p[0][0]
         self.y = self.p[0][1]
         self.pos = 0
+    def copy(self):
+        return Trajectory(self.p)
 
 if __name__ == '__main__':
     from car import Car
