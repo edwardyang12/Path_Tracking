@@ -28,12 +28,12 @@ def calc_phi(rotate_x,rotate_y):
 class Trajectory:
     def __init__(self, p):
         self.p = p
-        self.x = p[0][0]
-        self.y = p[0][1]
-        self.pos = 0
-        
+        self.reset()
+
     def update(self, d):
         assert d >= 0
+        if self.pos >= len(self.p)-1:
+             return self.x, self.y
         xDis = self.p[self.pos+1][0] - self.x
         yDis = self.p[self.pos+1][1] - self.y
         Dis = (xDis**2+yDis**2)**(0.5)
@@ -53,8 +53,15 @@ class Trajectory:
         x_error = self.x - x
         y_error = self.y - y
         distance_error = (y_error**2+x_error**2)**(0.5)
-        
-        trans_x, trans_y = shift(
+        if self.done():
+            trans_x, trans_y = shift(
+                self.p[self.pos][0],
+                self.p[self.pos][1],
+                -self.p[self.pos-1][0],
+                -self.p[self.pos-1][1])
+
+        else:
+            trans_x, trans_y = shift(
             self.p[self.pos+1][0],
             self.p[self.pos+1][1],
             -self.p[self.pos][0],
@@ -69,9 +76,16 @@ class Trajectory:
             theta_error = phi- theta
         else:
             theta_error = 2*math.pi + (phi-theta)
-        
         return distance_error,theta_error
-       
+
+    def done(self):
+        return self.pos >= len(self.p)-1
+
+    def reset(self):
+        self.x = self.p[0][0]
+        self.y = self.p[0][1]
+        self.pos = 0
+
 if __name__ == '__main__':
     from car import Car
     c = Car(0., 0., 0., 1.)
@@ -89,7 +103,7 @@ if __name__ == '__main__':
     p = zip(xList, yList)
     traj = Trajectory(p)
     d = Car(0., 0., 0., 1.)
-    
+
     for i in range(9):
         derr, therr = traj.error(d.x, d.y, d.angle)
         print "case 1:", "%.2f, %.2f" % (derr, therr)
@@ -108,7 +122,7 @@ if __name__ == '__main__':
     p = zip(xList, yList)
     traj = Trajectory(p)
     d = Car(0., 0., 0., .5)
-    
+
     for i in range(9):
         derr, therr = traj.error(d.x, d.y, d.angle)
         print "case 2:", "%.2f, %.2f" % (derr, therr)
@@ -126,7 +140,7 @@ if __name__ == '__main__':
     p = zip(xList, yList)
     traj = Trajectory(p)
     d = Car(math.pi/4, 0., 0., 1.)
-    
+
     for i in range(4):
         derr, therr = traj.error(d.x, d.y, d.angle)
         print "case 3:", "%.2f, %.2f" % (derr, therr)
@@ -139,7 +153,7 @@ if __name__ == '__main__':
 #case 4
     c = Car(math.pi, 0., 0., 1.)
     xList = [0]
-    yList = [0]     
+    yList = [0]
     for i in range(10):
         delta_theta = 0
         x, y, _ = c.update(delta_theta)
@@ -148,7 +162,7 @@ if __name__ == '__main__':
     p = zip(xList, yList)
     traj = Trajectory(p)
     d = Car(math.pi/4, 0., 0., 1.)
-    
+
     for i in range(4):
         derr, therr = traj.error(d.x, d.y, d.angle)
         print "case 4:", "%.2f, %.2f" % (derr, therr)

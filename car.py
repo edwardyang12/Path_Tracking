@@ -12,7 +12,7 @@ class Car:
         self.x = x
         self.y = y
         self.v = v
-        
+
     def update(self, theta):
         self.angle += theta
         if self.angle > math.pi*2:
@@ -20,8 +20,7 @@ class Car:
         xvel = self.v * math.cos(self.angle)
         yvel = self.v * math.sin(self.angle)
         self.x = xvel + self.x
-        self.y = yvel + self.y 
-        return self.x, self.y, self.angle
+        self.y = yvel + self.y
 
 if __name__ == '__main__':
     theta_init = 0
@@ -39,4 +38,3 @@ if __name__ == '__main__':
 
     plt.plot(xList, yList, '-o')
     plt.show()
-
