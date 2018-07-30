@@ -2,6 +2,7 @@ import math
 import matplotlib
 import matplotlib.pyplot as plt
 from car import Car
+from cmath import phase, exp
 from trajectory import Trajectory
 
 
@@ -46,6 +47,7 @@ class Tracker:
             carListx.append(self.car.x)
             carListy.append(self.car.y)
         steering_angles.append(0.)
+        steering_angles = map(lambda x: phase(exp(x*1j)),steering_angles)
         theta_errs.append(0.)
         d_errs.append(((self.car.x-self.trajectory.x)**2+(self.car.y-self.trajectory.y)**2)**0.5)
         cost = sum(
