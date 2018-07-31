@@ -13,12 +13,12 @@ import sys
 import numpy as np
 import os
 
-N_TRAIN_DIRECTIONS = 5
+N_TRAIN_DIRECTIONS = 50
 N_TEST_DIRECTIONS = 100
-N_NEURONS = 10
+N_NEURONS = 20
 VELOCITY = 1
 
-t=[[0,0],[1,1]]
+t=[[0,0],[15,50],[35,25],[50,75]]
 traj = Trajectory(t)
 traj_points = zip(*t)
 plt.plot(traj_points[0], traj_points[1], 'b-o')
@@ -44,7 +44,7 @@ if len(sys.argv) == 2:
                             'bounds': [-1, 1],
                             'maxiter': 100}) # 5th is mean of final sample distribution
     res=res[1].result[0]
-
+    #res = np.array([-0.4100800238312367, 0.9065876897750335, -0.9980261306813134, -0.9625396518439127, -0.9970185407054406, -0.1557137884977462, -0.23475197711323503, 0.9623407056339532, 0.0003643043795770796, 0.9998784151854134, -0.17913962495300492, 0.7288744997616561, 0.9997863882024728, -0.4679133960037745, 0.9837599267239302, 0.5973218078556877, -0.14236785040110517, -0.19385799545882604, -0.19673596952145042, 0.9732559394524914, 0.504706866048519])
     controller = NN(res).controller
     trackers = [Tracker(VELOCITY,i*2*pi/N_TEST_DIRECTIONS,traj.copy(),controller) for i in range(N_TEST_DIRECTIONS)]
     traces = map(lambda x: x.run(), trackers)
@@ -74,10 +74,3 @@ elif sys.argv[1] == '-i' and len(sys.argv) == 3:
         plt.show()
     else:
         print "file does not exist"
-
-
-
-#each run's res array is different
-# x (1,9) is best
-
-#2 tests on (1,41) result[0]
