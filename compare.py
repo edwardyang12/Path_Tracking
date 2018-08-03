@@ -43,52 +43,61 @@ def generate_paths():
 
 paths = generate_paths()
 
+#NN
 for count in range(len(sys.argv)-1):
     if os.path.isfile(sys.argv[int(count)]):
         name = sys.argv[int(count)+1]
-        method = name.split('_')
+        method = name.split('.')
         plt.figure(int(count)+1)
-        plt.title(name)
-        if method[0] == 'output':
-            searchfile = open(sys.argv[int(count)+1])
-            lines = searchfile.readlines()
-            res = np.array(eval(lines[0]))
-            searchfile.close()
-            controller = NN(res).controller
-            trackers = []
-            for i in range(N_TEST_DIRECTIONS):
-                for traj in paths[:N_TEST_TRAJ]:
-                    traj = Trajectory(traj)
-                    trackers.append(Tracker(VELOCITY,i*2*pi/N_TEST_DIRECTIONS,traj,controller))
-            traces = map(lambda x: x.run(), trackers)
-            for i, trace in enumerate(traces):
-                plt.plot(trace[1], trace[2], '-', color=hsv_to_rgb(linspace(0, 1, len(traces))[i],1,1))
-        elif method[0] == 'PID.txt':
-            PID = PID_controller(0.04,0.02,0.009)
-            controller = PID.controller
-            trackers = []
-            for i in range(N_TEST_DIRECTIONS):
-                for traj in paths[:N_TEST_TRAJ]:
-                    traj = Trajectory(traj)
-                    trackers.append(Tracker(VELOCITY,i*2*pi/N_TEST_DIRECTIONS,traj,controller))
-            traces = map(lambda x: x.run(), trackers)
-            for i, trace in enumerate(traces):
-                plt.plot(trace[1], trace[2], '-', color=hsv_to_rgb(linspace(0, 1, len(traces))[i],1,1))
-        elif method[0] == 'Simple.txt':
-            simple = Simple_controller()
-            controller = simple.controller
-            trackers = []
-            for i in range(N_TEST_DIRECTIONS):
-                for traj in paths[:N_TEST_TRAJ]:
-                    traj = Trajectory(traj)
-                    trackers.append(Tracker(VELOCITY,i*2*pi/N_TEST_DIRECTIONS,traj,controller))
-            traces = map(lambda x: x.run(), trackers)
-            for i, trace in enumerate(traces):
-                plt.plot(trace[1], trace[2], '-', color=hsv_to_rgb(linspace(0, 1, len(traces))[i],1,1))
+        plt.title(method[0])
+        searchfile = open(sys.argv[int(count)+1])
+        lines = searchfile.readlines()
+        res = np.array(eval(lines[0]))
+        searchfile.close()
+        controller = NN(res).controller
+        trackers = []
+        for i in range(N_TEST_DIRECTIONS):
+            for traj in paths[:N_TEST_TRAJ]:
+                traj = Trajectory(traj)
+                trackers.append(Tracker(VELOCITY,i*2*pi/N_TEST_DIRECTIONS,traj,controller))
+        traces = map(lambda x: x.run(), trackers)
+        for i, trace in enumerate(traces):
+            plt.plot(trace[1], trace[2], '-', color=hsv_to_rgb(linspace(0, 1, len(traces))[i],1,1))
     else:
         print "file does not exist"
+
+#PID
+plt.figure(int(count)+2)
+plt.title('PID')
+PID = PID_controller(0.04,0.02,0.009)
+controller = PID.controller
+trackers = []
+for i in range(N_TEST_DIRECTIONS):
+    for traj in paths[:N_TEST_TRAJ]:
+        traj = Trajectory(traj)
+        trackers.append(Tracker(VELOCITY,i*2*pi/N_TEST_DIRECTIONS,traj,controller))
+traces = map(lambda x: x.run(), trackers)
+for i, trace in enumerate(traces):
+    plt.plot(trace[1], trace[2], '-', color=hsv_to_rgb(linspace(0, 1, len(traces))[i],1,1))
+
+#simple
+plt.figure(int(count)+3)
+plt.title('Simple')
+simple = Simple_controller()
+controller = simple.controller
+trackers = []
+for i in range(N_TEST_DIRECTIONS):
+    for traj in paths[:N_TEST_TRAJ]:
+        traj = Trajectory(traj)
+        trackers.append(Tracker(VELOCITY,i*2*pi/N_TEST_DIRECTIONS,traj,controller))
+traces = map(lambda x: x.run(), trackers)
+for i, trace in enumerate(traces):
+    plt.plot(trace[1], trace[2], '-', color=hsv_to_rgb(linspace(0, 1, len(traces))[i],1,1))
+
+
 for i in range(N_TEST_TRAJ):
     xList, yList = zip(*paths[i])
-    plt.figure(int(count)+2)
+    plt.figure(int(count)+4)
+    plt.title('tests')
     plt.plot(xList, yList)
 plt.show()
