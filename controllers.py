@@ -5,17 +5,19 @@ class PID_controller:
         self.Kp = Kp
         self.Ki = Ki
         self.Kd = Kd
+        self.list_Theta_error = []
 
     def controller(self,distance_error, theta_error):
+
         accumulated_error = 0
-        list_Theta_error.append(theta_error)
-        if len(list_Theta_error) <10:
-            for i in range(len(list_Theta_error)):
-                accumulated_error = list_Theta_error[i] + accumulated_error
+        self.list_Theta_error.append(theta_error)
+        if len(self.list_Theta_error) <10:
+            for i in range(len(self.list_Theta_error)):
+                accumulated_error = self.list_Theta_error[i] + accumulated_error
         else:
-            for i in range(len(list_Theta_error)-10, len(list_Theta_error)):
-                accumulated_error = list_Theta_error[i] + accumulated_error
-        previous_error = list_Theta_error[len(list_Theta_error)-2]
+            for i in range(len(self.list_Theta_error)-10, len(self.list_Theta_error)):
+                accumulated_error = self.list_Theta_error[i] + accumulated_error
+        previous_error = self.list_Theta_error[len(self.list_Theta_error)-2]
         new_steering_angle = self.Kp*theta_error + self.Ki *accumulated_error + self.Kd*(theta_error-previous_error)/1
         return new_steering_angle
 
