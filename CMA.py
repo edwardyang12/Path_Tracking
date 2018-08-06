@@ -16,13 +16,13 @@ from cma import fmin2
 
 
 
-N_TRAIN_DIRECTIONS = 50
+N_TRAIN_DIRECTIONS = 4
 N_TEST_DIRECTIONS = 6
 N_NEURONS = 10
 VELOCITY = 1
 STEP = 33
 N_TEST_TRAJ = 5
-N_TRAIN_TRAJ = 10
+N_TRAIN_TRAJ = 4
 
 def generate_path(STEP):
 	path_list = []

@@ -65,11 +65,12 @@ class Tracker:
         steering_angles = map(lambda x: phase(exp(x*1j)),steering_angles)
         theta_errs.append(0.)
         d_errs.append(((self.car.x-self.trajectory.x)**2+(self.car.y-self.trajectory.y)**2)**0.5)
-        cost = sum(
-            map(lambda x: 100*x[0]**2 + 100*x[1]**2 + 10**5*x[2]**2,
-                zip(steering_angles, d_errs, theta_errs))) + 1000 * d_errs[-1]**2
+        # cost = sum(
+        #     map(lambda x: 100*x[0]**2 + 100*x[1]**2 + 10**5*x[2]**2,
+        #         zip(steering_angles, d_errs, theta_errs))) + 1000 * d_errs[-1]**2
+        cost = sum(map(lambda x: 100*x**2, d_errs[:-1]))+10000*d_errs[-1]**2
         self.trajectory.reset()
-        return cost, carListx, carListy
+        return cost, carListx, carListy, d_errs, theta_errs
 
 
 if __name__ == '__main__':
