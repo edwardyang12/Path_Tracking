@@ -68,7 +68,7 @@ class Tracker:
         # cost = sum(
         #     map(lambda x: 100*x[0]**2 + 100*x[1]**2 + 10**5*x[2]**2,
         #         zip(steering_angles, d_errs, theta_errs))) + 1000 * d_errs[-1]**2
-        cost = sum(map(lambda x: 100*x**2, d_errs[:-1]))+10000*d_errs[-1]**2
+        cost = sum(map(lambda x: 100*x**2, d_errs[:-1]))+1000*d_errs[-1]**2
         self.trajectory.reset()
         return cost, carListx, carListy, d_errs, theta_errs
 

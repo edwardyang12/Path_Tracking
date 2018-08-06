@@ -33,30 +33,25 @@ class Trajectory:
     def error(self, x, y, theta):
         min_distance_error=float('inf')
         min_waypoint_distance=float('inf')
-        pos=None
-        for i in range(len(self.p)):
-            if i==0: continue
-            q=array([self.p[i][0]-self.p[i-1][0], self.p[i][1]-self.p[i-1][1]])
-            c=array([x-self.p[i-1][0], y-self.p[i-1][1]])
-            waypoint_distance = norm(c)
-            if waypoint_distance==0:
-                min_distance_error=0
-                pos = i
-                break
+        
+	i=self.waypoint+1        
+	q=array([self.p[i][0]-self.p[i-1][0], self.p[i][1]-self.p[i-1][1]])
+        c=array([x-self.p[i-1][0], y-self.p[i-1][1]])
+        waypoint_distance = norm(c)
+        if waypoint_distance==0:
+            min_distance_error=0
+	else:
             proj_q_c = (dot(q,c)/norm(q)) * (q/norm(q))
             distance_error = norm(c-proj_q_c)
-            if waypoint_distance < min_waypoint_distance:
-                min_distance_error = distance_error
-                min_waypoint_distance = waypoint_distance
-                pos=i
-
-        q=self.p[pos][0]-self.p[pos-1][0] + 1j*(self.p[pos][1]-self.p[pos-1][1])
-        c=x-self.p[pos-1][0] + 1j*(y-self.p[pos-1][1])
+            min_distance_error = distance_error
         orientation_vector=exp(1j*theta)
-
+	q=q[0]+1j*q[1]
+	c=c[0]+1j*c[1]
         if c == 0 or (q/c).imag < 0:
             min_distance_error *= -1
         theta_error = phase(q/orientation_vector)
+
+	if waypoint_distance < 1: self.waypoint = min(self.waypoint+1,len(self.p)-2)
 
         return min_distance_error,theta_error
 
@@ -67,6 +62,7 @@ class Trajectory:
         self.x = self.p[0][0]
         self.y = self.p[0][1]
         self.pos = 0
+	self.waypoint = 0
 
     def copy(self):
         return Trajectory(self.p)

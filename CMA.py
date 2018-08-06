@@ -16,13 +16,13 @@ from cma import fmin2
 
 
 
-N_TRAIN_DIRECTIONS = 4
+N_TRAIN_DIRECTIONS = 24
+N_TRAIN_TRAJ = 24
 N_TEST_DIRECTIONS = 6
 N_NEURONS = 10
 VELOCITY = 1
 STEP = 33
 N_TEST_TRAJ = 5
-N_TRAIN_TRAJ = 4
 
 def generate_path(STEP):
 	path_list = []
@@ -77,7 +77,7 @@ if __name__ == '__main__':
                         args=(VELOCITY, ),
                         options={'popsize': 152,
                                 'bounds': [-1, 1],
-                                'maxiter': 100}) # 5th is mean of final sample distribution
+                                'maxiter': 200}) # 5th is mean of final sample distribution
         res=res[1].result[0]
         controller = NN(res).controller
         trackers = []
