@@ -20,9 +20,11 @@ STEP = 33
 N_TEST_TRAJ = 1
 N_TRAIN_TRAJ = 5
 
-time_List = []
-for i in range(int(100/VELOCITY)):
-    time_List.append(i)
+# time_List = []
+# for i in range(int(100/VELOCITY)):
+#     time_List.append(i)
+
+
 def generate_path(STEP):
 	path_list = []
 	point = [0,0]
@@ -68,6 +70,7 @@ for count in range(len(sys.argv)-1):
             plt.title(method[0])
             plt.plot(trace[1], trace[2], '-', color=hsv_to_rgb(linspace(0, 1, len(traces))[i],1,1))
             plt.subplot(212)
+            print len(trace[1]), len(trace[3])
             #plt.plot(time_List, trace[3], 'b-')
             #plt.plot(time_List, trace[4], 'g-')
     else:

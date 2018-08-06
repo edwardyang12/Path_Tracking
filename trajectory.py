@@ -32,19 +32,22 @@ class Trajectory:
 
     def error(self, x, y, theta):
         min_distance_error=float('inf')
+        min_waypoint_distance=float('inf')
         pos=None
         for i in range(len(self.p)):
             if i==0: continue
             q=array([self.p[i][0]-self.p[i-1][0], self.p[i][1]-self.p[i-1][1]])
             c=array([x-self.p[i-1][0], y-self.p[i-1][1]])
-            if norm(c)==0:
+            waypoint_distance = norm(c)
+            if waypoint_distance==0:
                 min_distance_error=0
                 pos = i
                 break
             proj_q_c = (dot(q,c)/norm(q)) * (q/norm(q))
             distance_error = norm(c-proj_q_c)
-            if distance_error < min_distance_error:
+            if waypoint_distance < min_waypoint_distance:
                 min_distance_error = distance_error
+                min_waypoint_distance = waypoint_distance
                 pos=i
 
         q=self.p[pos][0]-self.p[pos-1][0] + 1j*(self.p[pos][1]-self.p[pos-1][1])
@@ -70,13 +73,11 @@ class Trajectory:
 
 if __name__ == '__main__':
     from car import Car
-    c = Car(0., 0., 0., 1.)
-    xList = [0]
-    yList = [0]
+
 #case 1
     c = Car(0., 0., 0., 1.)
-    xList = [0]
-    yList = [0]
+    xList = []
+    yList = []
     for i in range(10):
         delta_theta = math.pi/2
         c.update(delta_theta)
@@ -91,66 +92,66 @@ if __name__ == '__main__':
         print "case 1:", "%.2f, %.2f" % (derr, therr)
         traj.update(1)
         d.update(delta_theta)
-
- #case 2
-    c = Car(0., 0., 0., 1.)
-    xList = [0]
-    yList = [0]
-    for i in range(10):
-        delta_theta = math.pi/2
-        c.update(delta_theta)
-        xList.append(c.x)
-        yList.append(c.y)
-    p = zip(xList, yList)
-    traj = Trajectory(p)
-    d = Car(0., 0., 0., .5)
-
-    for i in range(10):
-        derr, therr = traj.error(d.x, d.y, d.angle)
-        print "case 2:", "%.2f, %.2f" % (derr, therr)
-        traj.update(1)
-        d.update(delta_theta)
-#case 3
-    c = Car(0., 0., 0., 1.)
-    xList = [0]
-    yList = [0]
-    for i in range(10):
-        delta_theta = 0
-        c.update(delta_theta)
-        xList.append(c.x)
-        yList.append(c.y)
-    p = zip(xList, yList)
-    traj = Trajectory(p)
-    d = Car(math.pi/4, 0., 0., 1.)
-
-    for i in range(5):
-        derr, therr = traj.error(d.x, d.y, d.angle)
-        print "case 3:", "%.2f, %.2f" % (derr, therr)
-        traj.update(1)
-        d.update(-math.pi/2)
-        derr, therr = traj.error(d.x, d.y, d.angle)
-        print "case 3:", "%.2f, %.2f" % (derr, therr)
-        traj.update(1)
-        d.update(math.pi/2)
-#case 4
-    c = Car(math.pi, 0., 0., 1.)
-    xList = [0]
-    yList = [0]
-    for i in range(10):
-        delta_theta = 0
-        c.update(delta_theta)
-        xList.append(c.x)
-        yList.append(c.y)
-    p = zip(xList, yList)
-    traj = Trajectory(p)
-    d = Car(math.pi/4, 0., 0., 1.)
-
-    for i in range(5):
-        derr, therr = traj.error(d.x, d.y, d.angle)
-        print "case 4:", "%.2f, %.2f" % (derr, therr)
-        traj.update(1)
-        d.update(-math.pi/2)
-        derr, therr = traj.error(d.x, d.y, d.angle)
-        print "case 4:", "%.2f, %.2f" % (derr, therr)
-        traj.update(1)
-        d.update(math.pi/2)
+#
+#  #case 2
+#     c = Car(0., 0., 0., 1.)
+#     xList = [0]
+#     yList = [0]
+#     for i in range(10):
+#         delta_theta = math.pi/2
+#         c.update(delta_theta)
+#         xList.append(c.x)
+#         yList.append(c.y)
+#     p = zip(xList, yList)
+#     traj = Trajectory(p)
+#     d = Car(0., 0., 0., .5)
+#
+#     for i in range(10):
+#         derr, therr = traj.error(d.x, d.y, d.angle)
+#         print "case 2:", "%.2f, %.2f" % (derr, therr)
+#         traj.update(1)
+#         d.update(delta_theta)
+# #case 3
+#     c = Car(0., 0., 0., 1.)
+#     xList = [0]
+#     yList = [0]
+#     for i in range(10):
+#         delta_theta = 0
+#         c.update(delta_theta)
+#         xList.append(c.x)
+#         yList.append(c.y)
+#     p = zip(xList, yList)
+#     traj = Trajectory(p)
+#     d = Car(math.pi/4, 0., 0., 1.)
+#
+#     for i in range(5):
+#         derr, therr = traj.error(d.x, d.y, d.angle)
+#         print "case 3:", "%.2f, %.2f" % (derr, therr)
+#         traj.update(1)
+#         d.update(-math.pi/2)
+#         derr, therr = traj.error(d.x, d.y, d.angle)
+#         print "case 3:", "%.2f, %.2f" % (derr, therr)
+#         traj.update(1)
+#         d.update(math.pi/2)
+# #case 4
+#     c = Car(math.pi, 0., 0., 1.)
+#     xList = [0]
+#     yList = [0]
+#     for i in range(10):
+#         delta_theta = 0
+#         c.update(delta_theta)
+#         xList.append(c.x)
+#         yList.append(c.y)
+#     p = zip(xList, yList)
+#     traj = Trajectory(p)
+#     d = Car(math.pi/4, 0., 0., 1.)
+#
+#     for i in range(5):
+#         derr, therr = traj.error(d.x, d.y, d.angle)
+#         print "case 4:", "%.2f, %.2f" % (derr, therr)
+#         traj.update(1)
+#         d.update(-math.pi/2)
+#         derr, therr = traj.error(d.x, d.y, d.angle)
+#         print "case 4:", "%.2f, %.2f" % (derr, therr)
+#         traj.update(1)
+#         d.update(math.pi/2)
