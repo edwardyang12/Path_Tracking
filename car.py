@@ -1,4 +1,5 @@
 import math
+import cmath
 import matplotlib
 import matplotlib.pyplot as plt
 
@@ -14,9 +15,9 @@ class Car:
         self.v = v
 
     def update(self, theta):
-        self.angle += theta
-        if self.angle > math.pi*2:
-            self.angle -= 2*math.pi
+	curr = cmath.exp(1j*self.angle)
+	steer = cmath.exp(1j*theta)
+	self.angle = cmath.phase(curr*steer)
         xvel = self.v * math.cos(self.angle)
         yvel = self.v * math.sin(self.angle)
         self.x = xvel + self.x

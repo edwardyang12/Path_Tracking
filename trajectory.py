@@ -37,9 +37,10 @@ class Trajectory:
 	i=self.waypoint+1        
 	q=array([self.p[i][0]-self.p[i-1][0], self.p[i][1]-self.p[i-1][1]])
         c=array([x-self.p[i-1][0], y-self.p[i-1][1]])
-        waypoint_distance = norm(c)
-        if waypoint_distance==0:
-            min_distance_error=0
+	togo=array([x-self.p[i][0], y-self.p[i][1]])
+        waypoint_distance = norm(togo)
+        if norm(c) == 0:
+            min_distance_error = 0
 	else:
             proj_q_c = (dot(q,c)/norm(q)) * (q/norm(q))
             distance_error = norm(c-proj_q_c)
@@ -51,7 +52,8 @@ class Trajectory:
             min_distance_error *= -1
         theta_error = phase(q/orientation_vector)
 
-	if waypoint_distance < 1: self.waypoint = min(self.waypoint+1,len(self.p)-2)
+	# this should really be a configurable tolerance
+	if waypoint_distance < 1.5: self.waypoint = min(self.waypoint+1,len(self.p)-2)
 
         return min_distance_error,theta_error
 

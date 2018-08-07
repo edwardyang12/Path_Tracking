@@ -15,7 +15,7 @@ from controllers import PID_controller, Simple_controller
 from cma import fmin2
 
 N_TEST_DIRECTIONS = 1
-VELOCITY = .2
+VELOCITY = 1
 STEP = 33
 N_TEST_TRAJ = 1
 N_TRAIN_TRAJ = 5
