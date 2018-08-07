@@ -17,7 +17,7 @@ from cma import fmin2
 
 
 N_TRAIN_DIRECTIONS = 1
-N_TRAIN_TRAJ = 24
+N_TRAIN_TRAJ = 1
 N_NEURONS = 10
 VELOCITY = 1
 STEP = 33
@@ -86,7 +86,7 @@ if __name__ == '__main__':
         for i, trace in enumerate(traces):
             plt.plot(trace[1], trace[2], ':', color=hsv_to_rgb(linspace(0, 1, len(traces))[i],1,1))
 	for path in paths:
-	    plt.plot(zip(*path))        
+	    plt.plot(*zip(*path))        
 	plt.show()
         res = res.tolist()
         f = open(sys.argv[1],"w+")

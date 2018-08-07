@@ -53,7 +53,7 @@ class Trajectory:
         theta_error = phase(q/orientation_vector)
 
 	# this should really be a configurable tolerance
-	if waypoint_distance < 1.5: self.waypoint = min(self.waypoint+1,len(self.p)-2)
+	if waypoint_distance < 3: self.waypoint = min(self.waypoint+1,len(self.p)-2)
 
         return min_distance_error,theta_error
 
